@@ -7,29 +7,34 @@ namespace :csv_load do
   end
 
   desc "Load all the cvs data from ./db/data/customers.csv"
-  task customers: :environment do |task|
-    load_resources_for(task) 
+  task customers: :eager_load do |task|
+    load_resources_for(task)
   end
 
   desc "Load all the cvs data from ./db/data/merchants.csv"
-  task merchants: :environment do |task|
-    load_resources_for(task) 
+  task merchants: :eager_load do |task|
+    load_resources_for(task)
   end
 
-  desc "I will run all rake tasks in csv_load namespace"
-  task all: [:eager_load, :customers, :merchants]
+  desc "Load all the cvs data from ./db/data/items.csv"
+  task items: :eager_load do |task|
+    load_resources_for(task)
+  end
+
+  desc "Run all rake tasks in csv_load namespace"
+  task all: [:customers, :merchants, :items]
 
 private
 
   def load_resources_for(task)
-    task = task.name.split(':').last
-    clear_db_for(task)
-    load_csv_records_for(task)
-    reset_pk_sequence_for(task)
+    table_name = task.name.split(':').last
+    clear_db_for(table_name)
+    load_csv_records_for(table_name)
+    reset_pk_sequence_for(table_name)
   end
 
   def clear_db_for(table_name)
-    sql_command = "TRUNCATE #{table_name} RESTART IDENTITY"
+    sql_command = "TRUNCATE #{table_name} CASCADE"
     ActiveRecord::Base.connection.execute(sql_command)
   end
 
@@ -52,14 +57,8 @@ private
     models = ActiveRecord::Base.descendants
     models.find {|model| model.name == model_name}
   end
-  
+
   def reset_pk_sequence_for(table_name)
     ActiveRecord::Base.connection.reset_pk_sequence!(table_name)
   end
-
-
-  
-
-  
-
 end
