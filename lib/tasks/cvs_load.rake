@@ -21,8 +21,13 @@ namespace :csv_load do
     load_resources_for(task)
   end
 
+  desc "Load all the cvs data from ./db/data/invoices.csv"
+  task invoices: :eager_load do |task|
+    load_resources_for(task)
+  end
+
   desc "Run all rake tasks in csv_load namespace"
-  task all: [:customers, :merchants, :items]
+  task all: [:customers, :merchants, :items, :invoices]
 
 private
 
