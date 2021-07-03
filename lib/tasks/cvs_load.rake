@@ -64,8 +64,7 @@ private
   end
 
   def file_path_for(table_name)
-    root = File.expand_path(File.dirname(__FILE__))
-    File.join(root, '..', '..', 'db', 'data', "#{table_name}.csv")
+    File.join(Rails.root, 'db', 'data', "#{table_name}.csv")
   end
 
   def get_model(table_name)
