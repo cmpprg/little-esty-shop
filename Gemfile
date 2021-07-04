@@ -43,6 +43,7 @@ group :development, :test do
   gem 'capybara'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 4.0'
+  gem 'factory_bot'
 end
 
 group :development do
