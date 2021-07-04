@@ -7,7 +7,7 @@ RSpec.describe 'As a merchant.', type: :feature do
 
       visit "/merchants/#{merchant.id}/dashboard"
 
-      expect(page).to contain(merchant.name)
+      expect(page).to have_content(merchant.name)
     end
   end
 end
