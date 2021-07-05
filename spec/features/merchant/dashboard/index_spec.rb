@@ -7,7 +7,13 @@ RSpec.describe 'As a merchant.', type: :feature do
 
       visit "/merchants/#{merchant.id}/dashboard"
 
-      expect(page).to have_content(merchant.name)
+      within '#merchant-name' do
+        expect(page).to have_content(merchant.name)
+      end
+    end
+
+    xit 'I can see links to both merchant items index and merchant invoices index' do
+      require 'pry';binding.pry
     end
   end
 end
