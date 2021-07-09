@@ -46,6 +46,7 @@ group :development, :test do
   gem 'shoulda-matchers', '~> 4.0'
   gem "factory_bot_rails"
   gem 'faker'
+  gem 'rubyzip', '2.3.0' # this is locked on this version to remove annoying message for rubyzip 3.0
 end
 
 group :development do
