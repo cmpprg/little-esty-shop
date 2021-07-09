@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :invoice do
-    status { ['in progess', 'completed', 'cancelled'].sample }
+    status { Faker::Number.between(from: 0, to: 2) }
 
     customer factory: :customer
   end
