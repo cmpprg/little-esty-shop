@@ -8,7 +8,7 @@ class Customer < ApplicationRecord
     presence: true
   }
 
-  def full_name
-    "#{first_name} #{last_name}"
-  end
+  # def full_name
+  #   "#{first_name} #{last_name}"
+  # end
 end
