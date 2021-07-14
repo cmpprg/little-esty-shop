@@ -6,7 +6,9 @@
 </section>
 
 <section id="top-five-customers">
-  <% @top_five_customers.each.with_index do |customer, idx| %>
-    <p class="top-customer"><%= "#{idx + 1}. #{customer.full_name.titlecase} - #{customer.quantity_successful_transactions} purchases" %></p>
+  <% @merchant.top_five_customers.each.with_index do |customer, idx| %>
+    <p class="top-customer">
+      <%= "#{idx + 1}. #{customer.full_name.titlecase} - #{customer.quantity_successful_transactions} purchases" %>
+    </p>
   <% end %>
 </section>
