@@ -70,11 +70,12 @@ RSpec.describe 'As a merchant.', type: :feature do
       visit(merchant_dashboard_index_path(merchant))
 
       within('#top-five-customers') do
-        expect(page.all('.top-customer')[0]).to have_content("1. #{customer_2.first_name} #{customer_2.last_name} - 7 purchases")
-        expect(page.all('.top-customer')[1]).to have_content("2. #{customer_1.first_name} #{customer_1.last_name} - 6 purchases")
-        expect(page.all('.top-customer')[2]).to have_content("3. #{customer_3.first_name} #{customer_3.last_name} - 5 purchases")
-        expect(page.all('.top-customer')[3]).to have_content("4. #{customer_4.first_name} #{customer_4.last_name} - 4 purchases")
-        expect(page.all('.top-customer')[4]).to have_content("5. #{customer_5.first_name} #{customer_5.last_name} - 3 purchases")
+        expect(page).to have_content('Top Five Customers')
+        expect(page.all('.top-customer')[0]).to have_content("1. #{customer_2.full_name.titlecase} - 7 purchases")
+        expect(page.all('.top-customer')[1]).to have_content("2. #{customer_1.full_name.titlecase} - 6 purchases")
+        expect(page.all('.top-customer')[2]).to have_content("3. #{customer_3.full_name.titlecase} - 5 purchases")
+        expect(page.all('.top-customer')[3]).to have_content("4. #{customer_4.full_name.titlecase} - 4 purchases")
+        expect(page.all('.top-customer')[4]).to have_content("5. #{customer_5.full_name.titlecase} - 3 purchases")
       end
     end
   end
