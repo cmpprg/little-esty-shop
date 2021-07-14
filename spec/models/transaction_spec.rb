@@ -13,12 +13,6 @@ RSpec.describe Transaction do
   end
 
   describe 'methods' do
-    xit 'can return all successful transactions' do
-      transaction_1 = create(:transaction, result: 'success')
-      transaction_2 = create(:transaction, result: 'success')
-      transaction_3 = create(:transaction, result: 'failed')
-
-      expect(Transaction.successful).to contain_exactly(transaction_1, transaction_2)
-    end
+    
   end
 end
