@@ -10,7 +10,7 @@ RSpec.describe Merchant do
   end
 
   describe 'methods' do
-    xit 'can return top five customers, most successful transactions' do
+    it 'can return top five customers, most successful transactions' do
       merchant = create(:merchant)
       customer_1 = create(:customer)
       customer_2 = create(:customer)
