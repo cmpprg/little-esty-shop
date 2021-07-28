@@ -78,5 +78,44 @@ RSpec.describe 'As a merchant.', type: :feature do
         expect(page.all('.top-customer')[4]).to have_content("5. #{customer_5.full_name.titlecase} - 3 purchases")
       end
     end
+
+    it "I can see a section for 'items ready to ship' with names of items that are ordered and not yet shipped." do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      item_2 = create(:item, merchant: merchant)
+      item_3 = create(:item, merchant: merchant)
+      item_4 = create(:item, merchant: merchant)
+      invoice_1 = create(:invoice)
+      invoice_2 = create(:invoice)
+      invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, status: 0)
+      invoice_item_3 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
+
+      visit(merchant_dashboard_index_path(merchant))
+
+      expect(page).to have_content('Items Ready to Ship')
+
+      within('#items-ready-to-ship') do
+        expect(page).to have_content(item_1.name)
+        expect(page).to have_content(item_3.name)
+        expect(page).to have_content(item_4.name)
+        expect(page).to have_no_content(item_2.name)
+      end
+    end
+
+    xit "I can see and invoice id that is a link to that invoice next to every'ready to ship' item." do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      item_2 = create(:item, merchant: merchant)
+      item_3 = create(:item, merchant: merchant)
+      item_4 = create(:item, merchant: merchant)
+      invoice_1 = create(:invoice)
+      invoice_2 = create(:invoice)
+      invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, result: 0)
+      invoice_item_3 = create(:invoice_item, invoice: invoice_1, item: item_2, result: 2)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_3, result: 1)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_4, result: 1)
+    end
   end
 end
