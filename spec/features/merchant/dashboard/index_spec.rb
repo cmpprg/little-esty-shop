@@ -156,22 +156,20 @@ RSpec.describe 'As a merchant.', type: :feature do
       item_1 = create(:item, merchant: merchant)
       item_2 = create(:item, merchant: merchant)
       item_3 = create(:item, merchant: merchant)
-      item_4 = create(:item, merchant: merchant)
       invoice_1 = create(:invoice, created_at: Time.new(2021))
       invoice_2 = create(:invoice, created_at: Time.new(2020))
       invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, status: 0)
-      invoice_item_2 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
-      invoice_item_3 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
-      invoice_item_4 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
+      invoice_item_3 = create(:invoice_item, invoice: invoice_2, item: item_2, status: 1)
+      invoice_item_4 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
 
       visit(merchant_dashboard_index_path(merchant))
-
+      
       within('#items-ready-to-ship-list') do
         all_items = page.all('.items-ready-to-ship')
-        expect(all_items[0]).to have_content(item_3.name)
-        expect(all_items[1]).to have_content(item_4.name)
-        expect(all_items[2]).to have_content(item_2.name)
-        
+        expect(all_items[0]).to have_content(item_2.name)
+        expect(all_items[1]).to have_content(item_3.name)
+        expect(all_items[2]).to have_content(item_1.name)
+
         expect(all_items[0]).to have_content(invoice_2.created_at.strftime('%A, %B %d, %Y')) # Monday, January 01, 2020
         expect(all_items[1]).to have_content(invoice_2.created_at.strftime('%A, %B %d, %Y'))
         expect(all_items[2]).to have_content(invoice_1.created_at.strftime('%A, %B %d, %Y'))

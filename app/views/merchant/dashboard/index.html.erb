@@ -14,12 +14,13 @@
   <% end %>
 </section>
 
-<section id="items-ready-to-ship">
+<section id="items-ready-to-ship-list">
   <h2>Items Ready to Ship</h2>
   <% @merchant.items_ready_to_ship.each do |item| %>
-    <p id=<%= item.id %>><%= item.name %>
-      - Invoice #<%= link_to item.invoice_id, "/invoices/#{item.invoice_id}" %> 
-    
+    <p id=<%= item.invoice_item_id %> class='items-ready-to-ship'>
+      <%= item.name %>
+      - Invoice #<%= link_to item.invoice_id, invoice_path(item.invoice_id) %> 
+      - <%= invoice_datetime_format(item.invoice_created_at) %>
     </p>
   <% end %>
 </section>
