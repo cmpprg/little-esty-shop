@@ -96,7 +96,7 @@ RSpec.describe 'As a merchant.', type: :feature do
 
       expect(page).to have_content('Items Ready to Ship')
 
-      within('#items-ready-to-ship') do
+      within('#items-ready-to-ship-list') do
         expect(page).to have_content(item_1.name)
         expect(page).to have_content(item_3.name)
         expect(page).to have_content(item_4.name)
@@ -104,7 +104,7 @@ RSpec.describe 'As a merchant.', type: :feature do
       end
     end
 
-    it "I can see and invoice id that is a link to that invoice next to every'ready to ship' item." do
+    it "I can see an invoice id that is a link to that invoice next to every'ready to ship' item." do
       merchant = create(:merchant)
       item_1 = create(:item, merchant: merchant)
       item_2 = create(:item, merchant: merchant)
@@ -121,7 +121,7 @@ RSpec.describe 'As a merchant.', type: :feature do
 
       visit(merchant_dashboard_index_path(merchant))
 
-      within('#items-ready-to-ship') do
+      within('#items-ready-to-ship-list') do
         expect(page).to have_content(invoice_1.id)
         expect(page).to have_content(invoice_2.id)
         expect(page).to have_no_content(invoice_3.id)
@@ -143,11 +143,39 @@ RSpec.describe 'As a merchant.', type: :feature do
 
       visit(merchant_dashboard_index_path(merchant))
 
+      save_and_open_page
       within("##{invoice_item_4.id}") do
         click_link(invoice_2.id)
       end
 
       expect(current_path).to eql(invoice_path(invoice_2))
+    end
+
+    it "I can see and the ready to ship list is ordered by the invoice creation date next to each item" do
+      merchant = create(:merchant)
+      item_1 = create(:item, merchant: merchant)
+      item_2 = create(:item, merchant: merchant)
+      item_3 = create(:item, merchant: merchant)
+      item_4 = create(:item, merchant: merchant)
+      invoice_1 = create(:invoice, created_at: Time.new(2021))
+      invoice_2 = create(:invoice, created_at: Time.new(2020))
+      invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, status: 0)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
+      invoice_item_3 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
+      invoice_item_4 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
+
+      visit(merchant_dashboard_index_path(merchant))
+
+      within('#items-ready-to-ship-list') do
+        all_items = page.all('.items-ready-to-ship')
+        expect(all_items[0]).to have_content(item_3.name)
+        expect(all_items[1]).to have_content(item_4.name)
+        expect(all_items[2]).to have_content(item_2.name)
+        
+        expect(all_items[0]).to have_content(invoice_2.created_at.strftime('%A, %B %d, %Y')) # Monday, January 01, 2020
+        expect(all_items[1]).to have_content(invoice_2.created_at.strftime('%A, %B %d, %Y'))
+        expect(all_items[2]).to have_content(invoice_1.created_at.strftime('%A, %B %d, %Y'))
+      end
     end
   end
 end
