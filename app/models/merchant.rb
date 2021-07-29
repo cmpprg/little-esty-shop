@@ -15,6 +15,6 @@ class Merchant < ApplicationRecord
   def items_ready_to_ship
     self.items.joins(invoice_items: :invoice)
     .where.not(invoice_items: { status: 'shipped' })
-    .select('items.name, invoices.id as invoice_id')
+    .select('items.name, invoices.id as invoice_id, invoice_items.id')
   end
 end

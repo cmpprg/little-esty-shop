@@ -117,7 +117,7 @@ RSpec.describe 'As a merchant.', type: :feature do
       invoice_item_2 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
       invoice_item_3 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
       invoice_item_4 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
-      invoice_item_4 = create(:invoice_item, invoice: invoice_3, item: item_4, status: 2)
+      invoice_item_5 = create(:invoice_item, invoice: invoice_3, item: item_4, status: 2)
 
       visit(merchant_dashboard_index_path(merchant))
 
@@ -127,12 +127,25 @@ RSpec.describe 'As a merchant.', type: :feature do
         expect(page).to have_no_content(invoice_3.id)
       end
 
-      click_link(invoice_1.id)
+      within("##{invoice_item_1.id}") do
+        click_link(invoice_1.id)
+      end
 
       expect(current_path).to eql(invoice_path(invoice_1))
       
       visit(merchant_dashboard_index_path(merchant))
-      click_link(invoice_2.id)
+
+      within("##{invoice_item_3.id}") do
+        click_link(invoice_2.id)
+      end
+
+      expect(current_path).to eql(invoice_path(invoice_2))
+
+      visit(merchant_dashboard_index_path(merchant))
+
+      within("##{invoice_item_4.id}") do
+        click_link(invoice_2.id)
+      end
 
       expect(current_path).to eql(invoice_path(invoice_2))
     end
