@@ -88,9 +88,9 @@ RSpec.describe 'As a merchant.', type: :feature do
       invoice_1 = create(:invoice)
       invoice_2 = create(:invoice)
       invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, status: 0)
-      invoice_item_3 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
-      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
-      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
+      invoice_item_3 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
+      invoice_item_4 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
 
       visit(merchant_dashboard_index_path(merchant))
 
@@ -104,7 +104,7 @@ RSpec.describe 'As a merchant.', type: :feature do
       end
     end
 
-    xit "I can see and invoice id that is a link to that invoice next to every'ready to ship' item." do
+    it "I can see and invoice id that is a link to that invoice next to every'ready to ship' item." do
       merchant = create(:merchant)
       item_1 = create(:item, merchant: merchant)
       item_2 = create(:item, merchant: merchant)
@@ -112,10 +112,29 @@ RSpec.describe 'As a merchant.', type: :feature do
       item_4 = create(:item, merchant: merchant)
       invoice_1 = create(:invoice)
       invoice_2 = create(:invoice)
-      invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, result: 0)
-      invoice_item_3 = create(:invoice_item, invoice: invoice_1, item: item_2, result: 2)
-      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_3, result: 1)
-      invoice_item_2 = create(:invoice_item, invoice: invoice_2, item: item_4, result: 1)
+      invoice_3 = create(:invoice)
+      invoice_item_1 = create(:invoice_item, invoice: invoice_1, item: item_1, status: 0)
+      invoice_item_2 = create(:invoice_item, invoice: invoice_1, item: item_2, status: 2)
+      invoice_item_3 = create(:invoice_item, invoice: invoice_2, item: item_3, status: 1)
+      invoice_item_4 = create(:invoice_item, invoice: invoice_2, item: item_4, status: 1)
+      invoice_item_4 = create(:invoice_item, invoice: invoice_3, item: item_4, status: 2)
+
+      visit(merchant_dashboard_index_path(merchant))
+
+      within('#items-ready-to-ship') do
+        expect(page).to have_content(invoice_1.id)
+        expect(page).to have_content(invoice_2.id)
+        expect(page).to have_no_content(invoice_3.id)
+      end
+
+      click_link(invoice_1.id)
+
+      expect(current_path).to eql(invoice_path(invoice_1))
+      
+      visit(merchant_dashboard_index_path(merchant))
+      click_link(invoice_2.id)
+
+      expect(current_path).to eql(invoice_path(invoice_2))
     end
   end
 end
